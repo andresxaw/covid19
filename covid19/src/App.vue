@@ -1,5 +1,5 @@
 <template lang="pug">
-  .app
+  #app.app
     img.line.img-colombia(src="/static/colombia.png")
     h2.title.line #yomequedoencasa
     div(v-if="casesColombia")        

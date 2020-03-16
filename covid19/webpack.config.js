@@ -1,5 +1,7 @@
-var path = require('path')
-var webpack = require('webpack')
+const path = require('path')
+const webpack = require('webpack')
+const CompressionPlugin = require('compression-webpack-plugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports = {
   entry: './src/main.js',
@@ -26,6 +28,18 @@ module.exports = {
         }
       },
       {
+        test: /\.pug$/,
+        loader: 'pug-plain-loader'
+      },
+      {
+        test: /\.styl(us)?$/,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          'stylus-loader'
+        ]
+      },
+      {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/
@@ -39,6 +53,12 @@ module.exports = {
       }
     ]
   },
+  plugins:[
+    new VueLoaderPlugin(),
+    new CompressionPlugin({
+      test: /\.(js|css|html)$/,
+    })
+  ],
   resolve: {
     alias: {
       'vue$': 'vue/dist/vue.esm.js'
@@ -63,12 +83,6 @@ if (process.env.NODE_ENV === 'production') {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"production"'
-      }
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      compress: {
-        warnings: false
       }
     }),
     new webpack.LoaderOptionsPlugin({
