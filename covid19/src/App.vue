@@ -1,7 +1,9 @@
 <template lang="pug">
   #app.app
     img.line.img-colombia(src="/static/colombia.png")
-    h2.title.line #yomequedoencasa
+    h2.title.line COVID-19 - COLOMBIA
+    div
+      h2.title.line #yomequedoencasa
     div(v-if="casesColombia")        
       .item Casos Totales: 
         .number {{ casesColombia.cases }}
@@ -18,11 +20,11 @@
       .item En Estado Crítico: 
         .number {{ casesColombia.critical }}
     div(v-else)
-      div {{ error }}
+      .error {{ error }}
     div
       a(href="https://sahet.co")
         img.logo(src="/static/logo.png")
-      .info En esta página puedes ver el avance del corona virus en tiempo real 
+      .info En esta página puedes ver el avance del COVID19 (Corona Virus) en tiempo real 
 
 </template>
 
@@ -40,9 +42,9 @@ export default {
 
   async mounted() {
     try {
-      const response = await axios.get("https://coronavirus-19-api.herokuapp.com/countries");
+      const response = await axios.get("https://coronavirus-19-api.herokuapp.com/countries")
       
-      if(response){
+      if(response && response.data.length > 0){
         const data = response.data
 
         for (let i = 0; i < data.length; i++) {
@@ -50,14 +52,12 @@ export default {
           
           if(caseC.country === 'Colombia'){
             this.casesColombia = caseC
-
-            console.log(caseC)
             break
           } 
         }
       }
     } catch (error) {
-      this.error = 'No pudimos obtener los datos :('
+      this.error = 'Intenta más tarde. No pudimos obtener los datos :('
     }
   }
 }
@@ -75,6 +75,7 @@ export default {
 
 .title 
   font-size 1.7em
+  margin .3em 0
 
 .line
   display inline-block
@@ -97,4 +98,9 @@ export default {
   font-weight 600
   padding 0 1em
   font-size .9em
+
+.error
+  color red
+  margin 1em 0
+  font-weight 600
 </style>
